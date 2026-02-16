@@ -1,0 +1,5 @@
+{GOBUSTER}.txt
+{GOBUSTER}.cfg
+{GOBUSTER}.bak
+{GOBUSTER}.conf
+{GOBUSTER}.log

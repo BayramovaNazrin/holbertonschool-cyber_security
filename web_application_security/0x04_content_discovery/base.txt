@@ -1,0 +1,13 @@
+flag
+secret
+backup
+config
+hidden
+data
+system
+user
+root
+hbtn
+websec
+tftp
+8-flag
