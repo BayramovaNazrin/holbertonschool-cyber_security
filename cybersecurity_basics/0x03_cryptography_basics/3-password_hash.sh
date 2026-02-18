@@ -1,3 +1,2 @@
 #!/bin/bash
-salt=$(openssl rand -base64 12 | cut -c1-16)
-echo -n "${1}${salt}" | openssl sha512 > 3_hash.txt
+echo -n "$1$(openssl rand -base64 12 | cut -c1-16)" | openssl sha512 > 3_hash.txt
