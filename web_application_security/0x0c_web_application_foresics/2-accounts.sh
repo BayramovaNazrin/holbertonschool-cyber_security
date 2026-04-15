@@ -1,2 +1,5 @@
 #!/bin/bash
-grep "session opened for user root" auth.log | tail -1
+tail -1000 auth.log | \
+grep "session opened for user root" | \
+tail -1 | \
+awk '{print $9}'
