@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo dmesg | head
+cat dmesg | head
