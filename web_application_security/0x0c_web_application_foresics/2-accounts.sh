@@ -1,2 +1,2 @@
 #!/bin/bash
-tail -1000 auth.log | grep -E "Failed password|Accepted password"
+grep "session opened for user root" auth.log | tail -1
