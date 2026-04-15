@@ -1,2 +1,2 @@
 #!/bin/bash
-grep "Invalid user" auth.log | awk '{print $10}' | sort | uniq | wc -l
+grep "Invalid user" | awk '{print $10}' | sort | uniq | wc -l
