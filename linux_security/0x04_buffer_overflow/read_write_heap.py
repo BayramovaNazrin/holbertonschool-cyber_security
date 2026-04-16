@@ -1,66 +1,81 @@
 #!/usr/bin/python3
+"""
+Locates a string in the heap of a running process and replaces it.
+"""
 import sys
+import os
 
-def usage():
-    print("Usage: read_write_heap.py pid search_string replace_string")
+def print_error_and_exit(msg):
+    """Prints error message and exits with status 1."""
+    print(msg)
     sys.exit(1)
 
-# ---- Args ----
-if len(sys.argv) != 4:
-    usage()
+def read_write_heap():
+    """Main logic to find and replace string in process heap."""
+    if len(sys.argv) != 4:
+        print_error_and_exit("Usage: read_write_heap.py pid search_string replace_string")
 
-pid, search, replace = sys.argv[1], sys.argv[2], sys.argv[3]
+    try:
+        pid = int(sys.argv[1])
+    except ValueError:
+        print_error_and_exit("PID must be a number")
 
-try:
-    pid = int(pid)
-except ValueError:
-    usage()
+    search_str = sys.argv[2].encode('ascii')
+    replace_str = sys.argv[3].encode('ascii')
 
-try:
-    search_b = search.encode("ascii")
-    replace_b = replace.encode("ascii")
-except Exception:
-    sys.exit(1)
+    # Paths to memory maps and actual memory
+    maps_path = f"/proc/{pid}/maps"
+    mem_path = f"/proc/{pid}/mem"
 
-if len(search_b) != len(replace_b):
-    sys.exit(1)
+    if not os.path.exists(maps_path):
+        print_error_and_exit(f"Process {pid} not found in /proc")
 
-maps_path = f"/proc/{pid}/maps"
-mem_path = f"/proc/{pid}/mem"
+    heap_start = None
+    heap_end = None
 
-# ---- Find heap ----
-heap_start = None
-heap_end = None
+    # Step 1: Find the heap address range in /proc/[pid]/maps
+    try:
+        with open(maps_path, 'r') as maps_file:
+            for line in maps_file:
+                if "[heap]" in line:
+                    parts = line.split()
+                    addr_range = parts[0].split('-')
+                    heap_start = int(addr_range[0], 16)
+                    heap_end = int(addr_range[1], 16)
+                    print(f"[*] Found [heap] at: {hex(heap_start)} - {hex(heap_end)}")
+                    break
+    except PermissionError:
+        print_error_and_exit("Permission denied reading maps. Run as sudo.")
 
-with open(maps_path, "r") as maps:
-    for line in maps:
-        if "[heap]" in line:
-            addr = line.split()[0]
-            start, end = addr.split("-")
-            heap_start = int(start, 16)
-            heap_end = int(end, 16)
-            break
+    if not heap_start:
+        print_error_and_exit("Heap not found for this process.")
 
-if heap_start is None:
-    sys.exit(1)
+    # Step 2: Search and Replace in /proc/[pid]/mem
+    try:
+        with open(mem_path, 'rb+') as mem_file:
+            # Move file pointer to start of heap
+            mem_file.seek(heap_start)
+            heap_data = mem_file.read(heap_end - heap_start)
 
-# ---- Read full heap ----
-try:
-    with open(mem_path, "r+b", 0) as mem:
-        mem.seek(heap_start)
-        heap = mem.read(heap_end - heap_start)
-
-        offset = 0
-        while True:
-            idx = heap.find(search_b, offset)
+            # Find the string
+            idx = heap_data.find(search_str)
             if idx == -1:
-                break
+                print_error_and_exit(f"String '{sys.argv[2]}' not found in heap.")
 
-            abs_addr = heap_start + idx
-            mem.seek(abs_addr)
-            mem.write(replace_b)
+            print(f"[*] Found '{sys.argv[2]}' at offset {hex(idx)}")
 
-            offset = idx + len(search_b)
+            # Move pointer to the exact location of the string and overwrite
+            mem_file.seek(heap_start + idx)
+            mem_file.write(replace_str)
+            # Optional: if new string is shorter, you might want to null-terminate
+            # mem_file.write(b'\0') 
+            
+            print(f"[*] Successfully replaced with '{sys.argv[3]}'")
 
-except Exception:
-    sys.exit(1)
+    except PermissionError:
+        print_error_and_exit("Permission denied accessing memory. Run as sudo.")
+    except Exception as e:
+        print_error_and_exit(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    read_write_heap()
