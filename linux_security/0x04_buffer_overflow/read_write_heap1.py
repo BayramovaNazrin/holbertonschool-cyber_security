@@ -5,7 +5,6 @@ def usage():
     print("Usage: read_write_heap.py pid search_string replace_string")
     sys.exit(1)
 
-# ---- Args ----
 if len(sys.argv) != 4:
     usage()
 
@@ -28,7 +27,6 @@ if len(search_b) != len(replace_b):
 maps_path = f"/proc/{pid}/maps"
 mem_path = f"/proc/{pid}/mem"
 
-# ---- Find heap ----
 heap_start = None
 heap_end = None
 
@@ -44,23 +42,20 @@ with open(maps_path, "r") as maps:
 if heap_start is None:
     sys.exit(1)
 
-# ---- Read full heap ----
 try:
     with open(mem_path, "r+b", 0) as mem:
-        mem.seek(heap_start)
-        heap = mem.read(heap_end - heap_start)
+        addr = heap_start
 
-        offset = 0
-        while True:
-            idx = heap.find(search_b, offset)
-            if idx == -1:
-                break
+        while addr < heap_end:
+            mem.seek(addr)
+            chunk = mem.read(len(search_b))
 
-            abs_addr = heap_start + idx
-            mem.seek(abs_addr)
-            mem.write(replace_b)
-
-            offset = idx + len(search_b)
+            if chunk == search_b:
+                mem.seek(addr)
+                mem.write(replace_b)
+                addr += len(search_b)  # skip past match
+            else:
+                addr += 1
 
 except Exception:
     sys.exit(1)
