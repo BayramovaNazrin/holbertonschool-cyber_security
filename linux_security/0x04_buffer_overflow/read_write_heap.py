@@ -5,7 +5,9 @@ Usage: read_write_heap.py pid search_string replace_string
 """
 import sys
 
+
 def read_write_heap():
+    """Finds and replaces a string in the heap of a running process."""
     # 1. Validate arguments
     if len(sys.argv) != 4:
         print("Usage: read_write_heap.py pid search_string replace_string")
@@ -31,7 +33,7 @@ def read_write_heap():
                     heap_start = int(addr_range[0], 16)
                     heap_end = int(addr_range[1], 16)
                     break
-            
+
             if heap_start is None:
                 sys.exit(1)
     except Exception:
@@ -53,12 +55,13 @@ def read_write_heap():
             # Seek to the absolute memory location and overwrite
             mem_file.seek(heap_start + index)
             mem_file.write(replace_str)
-            
-            # Note: No print statements here! 
-            # We stay silent so the checker's output matches exactly.
+
+            # Note: No print statements here!
+            # We stay silent so the checker output matches exactly.
 
     except Exception:
         sys.exit(1)
+
 
 if __name__ == "__main__":
     read_write_heap()
