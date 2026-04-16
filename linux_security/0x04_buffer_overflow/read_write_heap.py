@@ -57,10 +57,8 @@ try:
             chunk = mem.read(len(search_b))
 
             if chunk == search_b:
-                print(f"[+] Found at {hex(addr)}")
                 mem.seek(addr)
                 mem.write(replace_b)
-                print(f"[+] Replaced at {hex(addr)}")
                 break
 
             addr += 1
