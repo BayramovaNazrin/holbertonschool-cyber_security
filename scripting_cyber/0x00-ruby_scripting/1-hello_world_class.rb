@@ -7,3 +7,4 @@ class HelloWorld
     puts @message
   end
 end
+hello = HelloWorld.new
