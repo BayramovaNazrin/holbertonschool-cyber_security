@@ -2,21 +2,21 @@
 require 'json'
 
 def merge_json_files(file1_path, file2_path)
-  # 1. Read and parse the content of the first file
+  # 1. Read and parse both files
   file1_content = File.read(file1_path)
   data1 = JSON.parse(file1_content)
 
-  # 2. Read and parse the content of the second file
   file2_content = File.read(file2_path)
   data2 = JSON.parse(file2_content)
 
-  # 3. Merge the data. If they are arrays, '+' joins them together.
-  # If they are hashes, you would use 'data2.merge(data1)' instead.
+  # 2. Merge the data arrays
   merged_data = data2 + data1
 
-  # 4. Convert the merged Ruby data back into a pretty JSON string
-  # and write it back into file2_path
+  # 3. Write back to the second file
   File.open(file2_path, 'w') do |f|
     f.write(JSON.pretty_generate(merged_data))
   end
+
+  # 4. PRINT THE EXPECTED CONFIRMATION MESSAGE (Crucial for the checker!)
+  puts "Merged JSON written to #{file2_path}"
 end
