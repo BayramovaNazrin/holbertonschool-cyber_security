@@ -1,11 +1,9 @@
 #!/usr/bin/env ruby
 class HelloWorld
-  def initialize(message)
+  def initialize
     @messgae = "Hello, World!"
   end 
   def print_hello
     puts @message
   end
 end
-hello = HelloWorld.new
-hello.print_hello
