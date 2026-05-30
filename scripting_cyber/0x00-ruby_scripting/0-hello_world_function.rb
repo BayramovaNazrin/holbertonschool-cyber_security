@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
 def say_hello(str)
-  print ("Hello, Holberton!" + str)
+  print ("Hello, Holberton! from" + str)
 end
-say_hello(" from Ruby!")
