@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 def say_hello(str)
   print ("Hello, Holberton!" + str)
 end
