@@ -13,5 +13,5 @@ def count_user_ids(path)
   user_ids = data.map { |item| item['userId'] }.compact
 
   # 4. Return the total count
-  user_ids.count
+  user_ids.tally
 end
