@@ -11,5 +11,8 @@ def count_user_ids(path)
 
   # 3. Tally them up! This automatically counts occurrences of each ID
   # and returns a Hash like: { 1 => 10, 2 => 8, ... }
-  user_ids.tally
+  counts = user_ids.tally
+  counts.each do |id, count|
+    puts "#{id}: #{count}"
+  end
 end
