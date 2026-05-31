@@ -1,28 +1,35 @@
 #!/usr/bin/env ruby
 require 'optparse'
+
 TASKS_FILE = 'tasks.txt'
+
 def load_tasks
   return [] unless File.exist?(TASKS_FILE)
   File.readlines(TASKS_FILE, chomp: true)
 end
+
 def save_tasks(tasks)
   File.write(TASKS_FILE, tasks.join("\n") + (tasks.empty? ? "" : "\n"))
 end
+
 def add_task(task)
   tasks = load_tasks
   tasks << task
   save_tasks(tasks)
   puts "Task '#{task}' added."
 end
+
 def list_tasks
   tasks = load_tasks
   if tasks.empty?
     puts "No tasks found."
   else
     puts "Tasks:"
-    tasks.each_with_index { |task, i| puts "#{i + 1}. #{task}" }
+    puts  # blank line
+    tasks.each { |task| puts task }
   end
 end
+
 def remove_task(index)
   tasks = load_tasks
   i = index.to_i - 1
@@ -34,6 +41,7 @@ def remove_task(index)
   save_tasks(tasks)
   puts "Task '#{removed}' removed."
 end
+
 options = {}
 parser = OptionParser.new do |opts|
   opts.banner = "Usage: cli.rb [options]"
@@ -54,6 +62,7 @@ parser = OptionParser.new do |opts|
   end
 end
 parser.parse!
+
 case options[:action]
 when :add    then add_task(options[:task])
 when :list   then list_tasks
