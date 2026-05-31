@@ -16,6 +16,7 @@ def list_tasks
       puts "No tasks found."
     else
       puts "Tasks:"
+      puts  # blank line
       tasks.each { |task| puts task }
     end
   else
