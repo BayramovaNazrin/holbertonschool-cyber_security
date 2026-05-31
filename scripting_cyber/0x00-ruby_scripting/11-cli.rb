@@ -1,74 +1,41 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
-# Class to parse and hold command-line options
-class CLIOptions
-  attr_accessor :name, :verbose, :count
+options = {}
 
-  def initialize
-    # Set default values
-    @name = "Guest"
-    @verbose = false
-    @count = 1
+opt_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: cli.rb [options]"
+
+  opts.on("-a", "--add TASK", "Add a new task") do |task|
+    options[:add] = task
+  end
+
+  opts.on("-l", "--list", "List all tasks") do
+    options[:list] = true
+  end
+
+  opts.on("-r", "--remove INDEX", "Remove a task by index") do |index|
+    options[:remove] = index
+  end
+
+  opts.on("-h", "--help", "Show help") do
+    puts opts
+    exit
   end
 end
 
-def parse_options
-  options = CLIOptions.new
-
-  # Initialize the OptionParser object
-  opt_parser = OptionParser.new do |opts|
-    opts.banner = "Usage: cli_app.rb [options]"
-    opts.separator ""
-    opts.separator "Specific options:"
-
-    # 1. String flag that requires an argument
-    opts.on("-n", "--name NAME", String, "Name of the user to greet (default: Guest)") do |name|
-      options.name = name
-    end
-
-    # 2. Boolean switch (flag without an argument)
-    opts.on("-v", "--[no-]verbose", "Run verbosely and print debug logs") do |verbose|
-      options.verbose = verbose
-    end
-
-    # 3. Numeric flag that automatically handles Integer casting
-    opts.on("-c", "--count COUNT", Integer, "Number of times to print the message") do |count|
-      options.count = count
-    end
-
-    opts.separator ""
-    opts.separator "Common options:"
-
-    # 4. Standard help message flag
-    opts.on_tail("-h", "--help", "Show this message") do
-      puts opts
-      exit
-    end
-  end
-
-  # Parse ARGV destructively
+begin
   opt_parser.parse!(ARGV)
-  options
-
-rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
-  # Gracefully handle validation/parsing syntax errors from the user
-  puts "CLI Error: #{e.message}"
-  puts "Run with --help to see valid options."
+rescue OptionParser::ParseError => e
+  puts e.message
   exit 1
 end
 
-# Execution pipeline
-if __FILE__ == $0
-  config = parse_options
-
-  if config.verbose
-    puts "[DEBUG] Verbose mode enabled."
-    puts "[DEBUG] Configuration values: Name=#{config.name}, Count=#{config.count}"
-  end
-
-  # Execute application core logic
-  config.count.times do |i|
-    puts "Hello, #{config.name}! (Iteration #{i + 1})"
-  end
+# Core task-handling logic placeholder (remember not to write/push to tasks.txt!)
+if options[:add]
+  # Add task logic
+elsif options[:list]
+  # List tasks logic
+elsif options[:remove]
+  # Remove task logic
 end
