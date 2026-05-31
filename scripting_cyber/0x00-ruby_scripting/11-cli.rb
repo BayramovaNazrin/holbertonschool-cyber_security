@@ -4,18 +4,15 @@ require 'optparse'
 
 TASKS_FILE = 'tasks.txt'
 
-# Load tasks from file, returns an array of strings
 def load_tasks
   return [] unless File.exist?(TASKS_FILE)
   File.readlines(TASKS_FILE, chomp: true)
 end
 
-# Save tasks array to file (one task per line)
 def save_tasks(tasks)
   File.open(TASKS_FILE, 'w') { |f| f.puts tasks }
 end
 
-# Add a new task
 def add_task(task)
   tasks = load_tasks
   tasks << task
@@ -23,17 +20,16 @@ def add_task(task)
   puts "Task '#{task}' added."
 end
 
-# List all tasks with numbers
 def list_tasks
   tasks = load_tasks
   if tasks.empty?
     puts "No tasks found."
   else
-    tasks.each_with_index { |task, i| puts "#{i + 1}. #{task}" }
+    puts "Tasks:"
+    tasks.each { |task| puts task }
   end
 end
 
-# Remove task by 1‑based index
 def remove_task(index_str)
   tasks = load_tasks
   index = index_str.to_i - 1
@@ -46,7 +42,6 @@ def remove_task(index_str)
   puts "Task '#{removed}' removed."
 end
 
-# Parse command line options
 options = {}
 parser = OptionParser.new do |opts|
   opts.banner = "Usage: cli.rb [options]"
@@ -67,15 +62,8 @@ parser = OptionParser.new do |opts|
   end
 end
 
-begin
-  parser.parse!
-rescue OptionParser::MissingArgument => e
-  puts e
-  puts parser
-  exit 1
-end
+parser.parse!
 
-# Execute the requested action
 case options[:action]
 when :add
   add_task(options[:task])
