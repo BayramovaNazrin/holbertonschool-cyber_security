@@ -13,6 +13,9 @@ def crack_password(hashed_password, dictionary_file)
       return
     end
   end
+
+  # Printed if the dictionary loop finishes completely without finding a match
+  puts "Password not found in dictionary."
 rescue StandardError
 end
 
