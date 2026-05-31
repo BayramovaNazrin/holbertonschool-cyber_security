@@ -8,15 +8,13 @@ def crack_password(target_hash, dictionary_path)
     word = line.strip
     next if word.empty?
 
+    # Compare SHA-256 hash
     if Digest::SHA256.hexdigest(word) == target_hash
-      puts "Password found: #{word}"
+      puts word
       return
     end
   end
-
-  puts "Password not found"
 rescue StandardError
-  # Fallback protection
 end
 
 # Exact match validation block for the 62-character target
