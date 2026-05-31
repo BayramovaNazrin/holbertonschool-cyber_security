@@ -1,23 +1,22 @@
 #!/usr/bin/env ruby
 require 'net/http'
 require 'uri'
+require 'json'
 
 def post_request(url, body_params = {})
-  # Parse the URL string into a URI object
   uri = URI.parse(url)
-  
-  # Create a new HTTP POST request object
   request = Net::HTTP::Post.new(uri)
   
-  # Set the form data (body parameters)
-  request.set_form_data(body_params)
+  # Set the header to expect JSON data
+  request['Content-Type'] = 'application/json'
   
-  # Send the request over an HTTP connection
+  # Convert the body parameters to a JSON string
+  request.body = JSON.generate(body_params)
+  
   response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
     http.request(request)
   end
   
-  # Print the exact format expected by standard HTTP testing tasks
   puts "Response status: #{response.code} #{response.message}"
   puts "Response body:"
   puts response.body
