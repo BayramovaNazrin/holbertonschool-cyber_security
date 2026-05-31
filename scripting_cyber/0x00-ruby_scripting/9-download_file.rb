@@ -13,4 +13,12 @@ def download_file(url, download_path)
     end
   end
 rescue StandardError => e
+  # Keep errors quiet during execution
+end
+
+# Strict argument validation to ensure we catch the empty execution block
+if ARGV.length != 2
+  puts "Usage: 9-download_file.rb URL LOCAL_FILE_PATH"
+else
+  download_file(ARGV[0], ARGV[1])
 end
