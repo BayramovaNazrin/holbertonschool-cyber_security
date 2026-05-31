@@ -32,21 +32,15 @@ rescue OptionParser::ParseError => e
   exit 1
 end
 
-# Application Logic
+# 1. Handle adding tasks
 if options[:add]
   File.open(TASK_FILE, "a") do |file|
     file.puts(options[:add])
   end
+end
 
-elsif options[:list]
-  puts "Tasks:"
-  if File.exist?(TASK_FILE)
-    File.readlines(TASK_FILE).each_with_index do |line, index|
-      puts "#{index + 1}. #{line.strip}"
-    end
-  end
-
-elsif options[:remove]
+# 2. Handle removing tasks
+if options[:remove]
   if File.exist?(TASK_FILE)
     tasks = File.readlines(TASK_FILE)
     idx = options[:remove] - 1
@@ -56,6 +50,17 @@ elsif options[:remove]
       File.open(TASK_FILE, "w") do |file|
         tasks.each { |t| file.puts(t) }
       end
+    end
+  end
+end
+
+# 3. Handle listing tasks
+if options[:list]
+  puts "Tasks:"
+  if File.exist?(TASK_FILE)
+    File.readlines(TASK_FILE).each_with_index do |line, index|
+      # This formats exactly as: 1. Task1
+      puts "#{index + 1}. #{line.strip}" 
     end
   end
 end
