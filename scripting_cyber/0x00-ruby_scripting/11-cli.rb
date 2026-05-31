@@ -34,13 +34,11 @@ end
 
 # Application Logic
 if options[:add]
-  # Silently appends the task to the file
   File.open(TASK_FILE, "a") do |file|
     file.puts(options[:add])
   end
 
 elsif options[:list]
-  # Prints the header and lists all tasks
   puts "Tasks:"
   if File.exist?(TASK_FILE)
     File.readlines(TASK_FILE).each do |line|
@@ -49,7 +47,6 @@ elsif options[:list]
   end
 
 elsif options[:remove]
-  # Silently removes the task based on a 1-based index
   if File.exist?(TASK_FILE)
     tasks = File.readlines(TASK_FILE)
     idx = options[:remove] - 1
