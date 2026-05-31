@@ -31,13 +31,3 @@ class CaesarCipher
     end
   end
 end
-
-# --- Exact Output Required by Task 0 ---
-cipher = CaesarCipher.new(5)
-message = "Hello, Holberton!"
-
-encrypted = cipher.encrypt(message)
-puts "Encrypted message: #{encrypted}"
-
-decrypted = cipher.decrypt(encrypted)
-puts "Decrypted message: #{decrypted}"
