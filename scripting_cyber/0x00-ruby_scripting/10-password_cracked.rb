@@ -8,7 +8,6 @@ def crack_password(target_hash, dictionary_path)
     word = line.strip
     next if word.empty?
 
-    # Compare SHA-256 hash
     if Digest::SHA256.hexdigest(word) == target_hash
       puts word
       return
@@ -17,7 +16,6 @@ def crack_password(target_hash, dictionary_path)
 rescue StandardError
 end
 
-# Exact match validation block for the 62-character target
 if ARGV.length != 2
   puts "Usage: 10-password_cracked.rb HASHED_PASSWORD DICTIONARY_FILE"
 else
