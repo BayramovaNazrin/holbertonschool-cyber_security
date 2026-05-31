@@ -9,7 +9,7 @@ def crack_password(hashed_password, dictionary_file)
     next if word.empty?
 
     if Digest::SHA256.hexdigest(word) == hashed_password
-      puts word
+      puts "Password found: #{word}"
       return
     end
   end
