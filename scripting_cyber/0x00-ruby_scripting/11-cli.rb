@@ -32,28 +32,30 @@ rescue OptionParser::ParseError => e
   exit 1
 end
 
-# Core Task Management Logic
+# Application Logic
 if options[:add]
+  # Silently appends the task to the file
   File.open(TASK_FILE, "a") do |file|
     file.puts(options[:add])
   end
 
 elsif options[:list]
+  # Prints the header and lists all tasks
   puts "Tasks:"
   if File.exist?(TASK_FILE)
-    File.readlines(TASK_FILE).each do |task|
-      puts task.strip
+    File.readlines(TASK_FILE).each do |line|
+      puts line.strip
     end
   end
 
 elsif options[:remove]
+  # Silently removes the task based on a 1-based index
   if File.exist?(TASK_FILE)
     tasks = File.readlines(TASK_FILE)
     idx = options[:remove] - 1
 
     if idx >= 0 && idx < tasks.length
       tasks.delete_at(idx)
-      # Rewrite the file with the remaining tasks
       File.open(TASK_FILE, "w") do |file|
         tasks.each { |t| file.puts(t) }
       end
