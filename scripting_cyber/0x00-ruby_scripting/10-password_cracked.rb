@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 require 'digest'
 
-def crack_password(target_hash, dictionary_file)
+def crack_password(hashed_password, dictionary_file)
   return unless File.exist?(dictionary_file)
 
   File.foreach(dictionary_file) do |line|
     word = line.strip
     next if word.empty?
 
-    if Digest::SHA256.hexdigest(word) == target_hash
+    if Digest::SHA256.hexdigest(word) == hashed_password
       puts word
       return
     end
