@@ -41,7 +41,6 @@ if options[:add]
 elsif options[:list]
   if File.exist?(TASK_FILE) && !File.zero?(TASK_FILE)
     File.readlines(TASK_FILE).each_with_index do |task, index|
-      # Many graders look for either "1. Task" or "0: Task" layout
       puts "#{index + 1}. #{task.strip}"
     end
   else
@@ -51,7 +50,6 @@ elsif options[:list]
 elsif options[:remove]
   if File.exist?(TASK_FILE)
     tasks = File.readlines(TASK_FILE)
-    # Convert index string to integer (adjusting for 1-based index)
     idx = options[:remove].to_i - 1
 
     if idx >= 0 && idx < tasks.length
