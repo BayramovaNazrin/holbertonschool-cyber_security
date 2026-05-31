@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 class CaesarCipher
   # Constructor to initialize the shift value
   def initialize(shift)
