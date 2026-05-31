@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 require 'digest'
 
-def crack_password(target_hash, dictionary_path)
-  return unless File.exist?(dictionary_path)
+def crack_password(target_hash, dictionary_file)
+  return unless File.exist?(dictionary_file)
 
-  File.foreach(dictionary_path) do |line|
+  File.foreach(dictionary_file) do |line|
     word = line.strip
     next if word.empty?
 
