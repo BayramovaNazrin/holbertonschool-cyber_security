@@ -37,15 +37,13 @@ if options[:add]
   File.open(TASK_FILE, "a") do |file|
     file.puts(options[:add])
   end
-  puts "Task added: #{options[:add]}"
 
 elsif options[:list]
   if File.exist?(TASK_FILE) && !File.zero?(TASK_FILE)
-    File.readlines(TASK_FILE).each_with_index do |task, index|
-      puts "#{index + 1}. #{task.strip}"
+    puts "Tasks:"
+    File.readlines(TASK_FILE).each do |task|
+      puts task.strip
     end
-  else
-    puts "No tasks found."
   end
 
 elsif options[:remove]
@@ -54,15 +52,10 @@ elsif options[:remove]
     idx = options[:remove].to_i - 1
 
     if idx >= 0 && idx < tasks.length
-      removed = tasks.delete_at(idx)
+      tasks.delete_at(idx)
       File.open(TASK_FILE, "w") do |file|
         tasks.each { |t| file.puts(t) }
       end
-      puts "Removed task: #{removed.strip}"
-    else
-      puts "Invalid index."
     end
-  else
-    puts "No tasks to remove."
   end
 end
