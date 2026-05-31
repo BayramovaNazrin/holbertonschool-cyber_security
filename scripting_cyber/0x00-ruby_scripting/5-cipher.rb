@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+
 class CaesarCipher
   # Constructor to initialize the shift value
   def initialize(shift)
@@ -19,8 +20,9 @@ class CaesarCipher
   # Keep the core logic private so it can only be called within the instance
   private
 
-  def cipher(message, shift_value)
-    message.chars.map { |char| shift_char(char, shift_value) }.join
+  # FIXED: Parameter renamed from 'shift_value' to 'shift' to match the pattern
+  def cipher(message, shift)
+    message.chars.map { |char| shift_char(char, shift) }.join
   end
 
   # Helper method to handle individual character shifting
@@ -48,13 +50,11 @@ cipher = CaesarCipher.new(3)
 secret_message = "Hello, Ruby World! 2026"
 encrypted = cipher.encrypt(secret_message)
 puts "Original:  #{secret_message}"
-puts "Encrypted: #{encrypted}" 
-# Output: "Khoor, Ukeb Zruog! 2026"
+puts "Encrypted: #{encrypted}"
 
 # 3. Decrypt the message back
 decrypted = cipher.decrypt(encrypted)
 puts "Decrypted: #{decrypted}"
-# Output: "Hello, Ruby World! 2026"
 
 # 4. Verifying privacy restriction
 begin
