@@ -13,12 +13,14 @@ def download_file(url, download_path)
     end
   end
 rescue StandardError => e
-  # Keep errors quiet during execution
+  # Keeps the execution clean if an unexpected network blip happens
 end
 
-# Strict argument validation to ensure we catch the empty execution block
-if ARGV.length != 2
-  puts "Usage: 9-download_file.rb URL LOCAL_FILE_PATH"
-else
-  download_file(ARGV[0], ARGV[1])
+# This ensures the code inside ONLY runs if the file is executed directly from CLI
+if __FILE__ == $0
+  if ARGV.length != 2
+    puts "Usage: 9-download_file.rb URL LOCAL_FILE_PATH"
+  else
+    download_file(ARGV[0], ARGV[1])
+  end
 end
